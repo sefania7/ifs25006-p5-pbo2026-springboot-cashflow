@@ -35,7 +35,7 @@ pipeline {
         }
 
         // ============================================================
-        // BUILD & TEST (Maven + JaCoCo report)
+        // BUILD & TEST (Maven + Jacoco 100%)
         // ============================================================
         stage('Build & Test') {
             agent {
@@ -60,8 +60,8 @@ pipeline {
                         cp .env.example .env
                     fi
 
-                    echo "=== Maven Clean Verify (JaCoCo report) ==="
-                    # verify runs tests and generates the JaCoCo report; the coverage gate is disabled.
+                    echo "=== Maven Clean Verify (Jacoco 100%) ==="
+                    # verify = test + jacoco:check (instruction/branch/line/method/class = 100%)
                     # -Pproduction = Vaadin frontend production build saat package
                     # cache Maven persisten agar tidak download ulang (hindari 429 Maven Central)
                     ./mvnw -B clean verify -Pproduction \
@@ -222,6 +222,7 @@ pipeline {
         // PUBLISH APPLICATION
         // ============================================================
         stage('Publish Application') {
+
             steps {
 
                 // ========================================================
@@ -329,7 +330,6 @@ pipeline {
                     def redeployResponse = sh(
                         script: '''
                             set -e
-                            set +x
 
                             curl -sS --fail-with-body \
                                 -X POST "$URL_REDEPLOY" \
@@ -378,7 +378,6 @@ pipeline {
                         def progressResponse = sh(
                             script: '''
                                 set -e
-                                set +x
 
                                 curl -sS --fail-with-body \
                                     -X POST "$URL_PROGRESS" \
@@ -486,7 +485,7 @@ pipeline {
             echo "=========================================="
             echo "Result: ${currentBuild.currentResult}"
             echo "📦 Artifact: ${env.ARTIFACT_URL ?: '(not published)'}"
-            echo "Periksa stage Deploy Application untuk status deployment."
+            echo "🚀 Aplikasi Spring Boot berhasil dideploy."
         }
 
         failure {
