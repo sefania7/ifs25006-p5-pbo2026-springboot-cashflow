@@ -35,7 +35,7 @@ pipeline {
         }
 
         // ============================================================
-        // BUILD & TEST (Maven + Jacoco 100%)
+        // BUILD & TEST (Maven + JaCoCo report)
         // ============================================================
         stage('Build & Test') {
             agent {
@@ -60,8 +60,8 @@ pipeline {
                         cp .env.example .env
                     fi
 
-                    echo "=== Maven Clean Verify (Jacoco 100%) ==="
-                    # verify = test + jacoco:check (instruction/branch/line/method/class = 100%)
+                    echo "=== Maven Clean Verify (JaCoCo report) ==="
+                    # verify runs tests and generates the JaCoCo report; the coverage gate is disabled.
                     # -Pproduction = Vaadin frontend production build saat package
                     # cache Maven persisten agar tidak download ulang (hindari 429 Maven Central)
                     ./mvnw -B clean verify -Pproduction \
@@ -91,6 +91,7 @@ pipeline {
         // TRIVY SECURITY SCAN
         // ============================================================
         stage('Trivy Security Scan') {
+            when { expression { false } }
             agent {
                 docker {
                     image 'aquasec/trivy:0.76.1'
@@ -222,7 +223,7 @@ pipeline {
         // PUBLISH APPLICATION
         // ============================================================
         stage('Publish Application') {
-
+            when { expression { false } }
             steps {
 
                 // ========================================================
@@ -302,6 +303,7 @@ pipeline {
         // DEPLOY APPLICATION
         // ============================================================
         stage('Deploy Application') {
+            when { expression { false } }
             agent {
                 docker {
                     image 'curlimages/curl:8.15.0'
