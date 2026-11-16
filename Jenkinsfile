@@ -91,7 +91,6 @@ pipeline {
         // TRIVY SECURITY SCAN
         // ============================================================
         stage('Trivy Security Scan') {
-            when { expression { false } }
             agent {
                 docker {
                     image 'aquasec/trivy:0.76.1'
@@ -223,7 +222,6 @@ pipeline {
         // PUBLISH APPLICATION
         // ============================================================
         stage('Publish Application') {
-            when { expression { false } }
             steps {
 
                 // ========================================================
@@ -303,7 +301,6 @@ pipeline {
         // DEPLOY APPLICATION
         // ============================================================
         stage('Deploy Application') {
-            when { expression { false } }
             agent {
                 docker {
                     image 'curlimages/curl:8.15.0'
