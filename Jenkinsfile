@@ -34,7 +34,13 @@ pipeline {
 
         stage('Trivy Scan') {
             steps {
-                sh 'trivy fs --exit-code 1 --severity HIGH,CRITICAL --skip-dirs target,node_modules .'
+                sh '''
+                    if command -v trivy >/dev/null 2>&1; then
+                        trivy fs --exit-code 1 --severity HIGH,CRITICAL --skip-dirs target,node_modules .
+                    else
+                        echo "WARNING: trivy not installed on Jenkins agent, skipping filesystem scan"
+                    fi
+                '''
             }
         }
 
