@@ -484,7 +484,7 @@ pipeline {
             echo "=========================================="
             echo "Result: ${currentBuild.currentResult}"
             echo "📦 Artifact: ${env.ARTIFACT_URL ?: '(not published)'}"
-            echo "🚀 Aplikasi Spring Boot berhasil dideploy."
+            echo "Periksa stage Deploy Application untuk status deployment."
         }
 
         failure {
