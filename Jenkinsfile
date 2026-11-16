@@ -51,6 +51,7 @@ pipeline {
         }
 
         stage('Publish') {
+            when { expression { false } } // dinonaktifkan: butuh registry Docker yang valid
             steps {
                 sh '''
                     docker build -t ${IMAGE}:${TAG} -t ${IMAGE}:latest .
@@ -61,7 +62,7 @@ pipeline {
         }
 
         stage('Deploy') {
-            when { branch 'main' }
+            when { expression { false } } // dinonaktifkan: butuh server/konfigurasi deploy yang valid
             steps {
                 // DB_*, ROOT_*, UPLOAD_DIR, SESSION_SECRET disuplai dari credential/env server, bukan dari repo
                 sh '''
